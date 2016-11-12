@@ -1,4 +1,4 @@
-object ZombieHelloWorld extends Zombie {
+object ZombieHelloWorld extends ScalaZombie {
     def main(args: Array[String]): Unit = {
 HelloWorld is a zombie
     summon

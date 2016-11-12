@@ -1,4 +1,4 @@
-object ChefFibonacci extends ScalaChef {
+object ZombieFibonacci extends ScalaZombie {
     def main(args: Array[String]): Unit = {
 Zombie1 is a zombie
 summon
