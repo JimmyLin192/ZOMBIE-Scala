@@ -1,3 +1,5 @@
+object ChefFibonacci extends ScalaChef {
+    def main(args: Array[String]): Unit = {
 Zombie1 is a zombie
 summon
     remember 1
@@ -21,3 +23,4 @@ summon
         until remembering 100
     animate
 animate
+}
