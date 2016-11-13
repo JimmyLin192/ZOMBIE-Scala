@@ -1,6 +1,6 @@
 ## Modified ZOMBIE (M-ZOMBIE) DSL in Scala
 ZOMBIE is a programming language designed for Necromancers, particularly evil ones. ZOMBIE is an acronym, and stands for Zombie-Oriented Machine-Being Interface Engine.
-This project implements a **slightly modified version** of ZOMBIE language using the convenient and flexible features of Scala. 
+This project implements a **slightly modified version** of ZOMBIE language using the convenient and flexible features of Scala.
 
 ## TODOs
 
@@ -32,6 +32,41 @@ Entities are declared with the following structure:
 
 Entity-type is one of the following: **ZOMBIE**, **GHOST**, **VAMPIRE**, **DEMON**, **DJINN**.
 
+### **ZOMBIE**
+- may be **declared** and then **animated**. An **animated** zombie can be expected to do whatever it is commanded to do, straight away.
+- process their active tasks in sequence, beginning from the first task defined, as quickly as they can. They perform each task exactly once.
+- animated by necromancers.
+
+### **GHOST**
+- remain behind either because of an unconsecrated death or to avenge an injustice.
+- may be declared and then **disturbed**. A **disturbed**, and hence restless, ghost will eventually do what is asked of it.
+- process their active tasks in sequence, beginning from the first task defined, but they may wait for an undefined time before beginning and between each task.
+- eventually perform each task exactly once.
+
+### **VAMPIRE**
+- deliberately pervert their own death to remain active and wreak evil.
+- may be declared
+- do not require animating or disturbing, and will do what is asked of them, but not necessarily in the order requested.
+- process their active tasks in random order, as quickly as they can
+- perform each task exactly once, and complete one task before beginning the next.
+
+### **DEMON**
+- may be declared
+- do not require animating or disturbing
+- do what is asked of it, if the proper precautions are taken, but may summon other demons to help it. This may or may not be a good thing.
+- process their active tasks in random order, as quickly as they can.
+- may decide to perform tasks multiple times before becoming inactive, but will perform each task at least once.
+- They may perform multiple tasks at the same time.
+- They may also summon additional demons exactly like themselves.
+
+### **DJINN**
+- free-willed entities of capricious nature
+- commanded by a person who controls an object which is bound to them in an unbreakable connection
+- Woe betide if you lose control of the object, however, since djinn harbour great grudges against those who dare to command them. Some of the most powerful djinn can grant wishes.
+- may be declared
+- do not require animating or disturbing
+- will do what is asked of it, if the proper precautions are taken, but may summon other demons to help it. This may or may not be a good thing.
+
 Entity-name is any well-formed identifier string.
 
 Entity-statements is a list of any valid statements, which may include entity declarations.
@@ -57,8 +92,8 @@ Some statements delineate matched pairs, which may be nested to any level. All t
 - say ([entity-name,] text)
 > Print the text to the standard output. (It doesn't matter what entity does this, as the result is the same.)
 
-## References 
-1. Original Zombie Specification: 
+## References
+1. Original Zombie Specification:
 
     http://www.dangermouse.net/esoteric/zombie.html
 
