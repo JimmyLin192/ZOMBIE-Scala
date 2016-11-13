@@ -1,26 +1,21 @@
 object ZombieFibonacci extends ScalaZombie {
     def main(args: Array[String]): Unit = {
-Zombie1 is a zombie
-summon
-    remember 1
-bind
+ZOMBIE("Zombie1")
+SUMMON
+    REMEMBER(1)
+BIND
 
-Zombie2 is a zombie
-summon
-    remember 1
-bind
 
-FibonacciZombie is a zombie
-summon
-    remember 0
-    task SayFibonaccis
-        shamble
-            say moan Zombie1
-            say moan Zombie2
-            remember Zombie1 moan Zombie1 moan Zombie2
-            remember Zombie2 moan Zombie1 moan Zombie2
-            remember moan 2
-        until remembering 100
-    animate
-animate
+ZOMBIE("Zombie2")
+SUMMON
+    REMEMBER(2)
+BIND
+
+ZOMBIE("FibonacciZombie")
+SUMMON
+REMEMBER(0)
+MOAN("Zombie1")
+MOAN("Zombie2")
+BIND
+    }
 }
