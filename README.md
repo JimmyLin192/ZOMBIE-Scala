@@ -4,7 +4,7 @@ This project implements a **slightly modified version** of ZOMBIE language using
 
 ## TODOs
 
-1. fill in all coordinators' information
+1. ~~fill in all coordinators' information~~
 2. implement conditions of flow control
 3. implement repetitions of flow control
 4. implement Operators: remembering, rend, turn
