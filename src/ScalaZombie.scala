@@ -3,12 +3,15 @@ import scala.collection.mutable
 
 class ScalaZombie {
     /* Modelling */
+    abstract sealed class Statement
     var curEntity : String = ""
-    val memories = new mutable.HashMap[String, Int]()
     var curLineNum : Int = 0
+    val memories = new mutable.HashMap[String, Int]()
+    val programs = new mutable.HashMap[Int, Statement]()
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
+
 
     /* Define keywords: EntIty Declaration */
     object ZOMBIE {
@@ -39,19 +42,73 @@ class ScalaZombie {
         }
     }
     /* Define keywords: Task */
-    def REMEMBER (num: Int) {
-        REMEMBER(curEntity, num)
-    }
-    def REMEMBER (entity: String, num: Int) {
-        if (!canExecTask) {
-            throw new RuntimeException("It is not the time yet to call REMEMBER.")
+    object REMEMBER {
+        def apply(num: Int) {
+            this.apply(curEntity, num)
         }
-        if (!memories.contains(entity)) {
-           throw new RuntimeException("Cannot remember sth for a non-existent entity.")
+        def apply(entity: String, num: Int)  {
+            programs(curLineNum) = new stmtRemember(entity, num)
+            curLineNum += 1
         }
-        memories(entity) = num
     }
-    def MOAN (entity: String): Int = {
+    object FORGET {
+        def apply(entity: String) {
+            programs(curLineNum) = new stmtForget(entity)
+            curLineNum += 1
+        }
+    }
+    object SAY {
+        def apply (text: String) {
+            programs(curLineNum) = new stmtSay(curEntity, text)
+            curLineNum += 1
+        }
+        def apply (entity: String, text: String) {
+            programs(curLineNum) = new stmtSay(entity, text)
+            curLineNum += 1
+        }
+        def apply (num: Int) {
+            programs(curLineNum) = new stmtSay(curEntity, num.toString)
+            curLineNum += 1
+        }
+        def apply (entity: String, num: Int) {
+            programs(curLineNum) = new stmtSay(entity, num.toString)
+            curLineNum += 1
+        }
+    }
+    class stmtForget (entity: String) extends Statement {
+        exec()
+        def exec() {
+            if (!memories.contains(entity)) {
+                throw new RuntimeException("Cannot forget sth for a non-existent entity.")
+            }
+            memories -= entity
+        }
+    }
+    class stmtSay (entity: String, text: String) extends Statement {
+        exec()
+        def exec() {
+            if (!canExecTask) {
+                throw new RuntimeException("It is not the time yet to call SAY.")
+            }
+            if (!memories.contains(entity)) {
+                throw new RuntimeException("Cannot say sth for a non-existent entity.")
+            }
+            println(text)
+        }
+    }
+    class stmtRemember (entity: String, num: Int) extends Statement {
+        exec()
+        def exec () {
+            if (!canExecTask) {
+                throw new RuntimeException("It is not the time yet to call REMEMBER.")
+            }
+            if (!memories.contains(entity)) {
+                throw new RuntimeException("Cannot remember sth for a non-existent entity.")
+            }
+            memories(entity) = num 
+        }
+    }
+     def MOAN (entity: String): Int = {
         if (!canExecTask) {
             throw new RuntimeException("It is not the time yet to call MOAN.")
         }
@@ -59,32 +116,9 @@ class ScalaZombie {
            throw new RuntimeException("Cannot moan sth for a non-existent entity.")
         }
         curLineNum += 1
-        memories(entity)
-    }
-    def FORGET (entity: String) {
-        if (!memories.contains(entity)) {
-           throw new RuntimeException("Cannot forget sth for a non-existent entity.")
-        }
-        memories -= entity
-    }
-    def SAY (num: Int) {
-        SAY(curEntity, num.toString)
-    }
-    def SAY (entity: String, num: Int) {
-        SAY(entity, num.toString)
-    }
-    def SAY (text: String) {
-        SAY(curEntity, text)
-    }
-    def SAY (entity: String, text: String) {
-        if (!canExecTask) {
-            throw new RuntimeException("It is not the time yet to call SAY.")
-        }
-        if (!memories.contains(entity)) {
-           throw new RuntimeException("Cannot say sth for a non-existent entity.")
-        }
-        println(text)
-    }
+        return memories(entity)
+    }   
+    
     /* Define keywords: Flow Control  */
     /* Sequential */
     def SUMMON {
@@ -111,7 +145,7 @@ class ScalaZombie {
         
     }
     def STUMBLE {
-
+        
     }
     /* Condition */
     def TASTE {
