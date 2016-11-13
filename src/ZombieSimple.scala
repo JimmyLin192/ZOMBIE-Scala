@@ -1,4 +1,4 @@
-object ZombieFibonacci extends ScalaZombie {
+object ZombieSimple extends ScalaZombie {
     def main(args: Array[String]): Unit = {
 ZOMBIE("Zombie1")
 SUMMON

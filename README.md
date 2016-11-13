@@ -13,10 +13,11 @@ This project implements a **slightly modified version** of ZOMBIE language using
 
 ## M-ZOMBIE Language
 
+###Entity Declaration
 Entities are the basic elements of a ZOMBIE program. Valid ZOMBIE programs must declare at least one entity.
 Entities are declared with the following structure:
 
-	entity-type(entity-name) { entity-statements }
+	entity-type (entity-name) { entity-statements }
 
 Entity-type is one of the following: **ZOMBIE**, **GHOST**, **VAMPIRE**, **DEMON**, **DJINN**.
 
@@ -24,11 +25,30 @@ Entity-name is any well-formed identifier string.
 
 Entity-statements is a list of any valid statements, which may include entity declarations.
 
+###Entity Declaration Statements
+Some statements delineate matched pairs, which may be nested to any level. All the following combinations are properly matched pairs:
 
+- summon / animate
+- summon / bind
+- summon / disturb
+
+###Task Statements
+
+- forget (entity-name)
+> Instructs the entity to forget its remembered data value.
+
+- moan (entity-name)
+> Instructs the named entity to moan its remembered data value, and to keep remembering it.
+
+- remember ([entity-name,] values)
+> Instructs the entity to remember the sum of the values in the statement stack. Since a zombie can only remember one thing at a time, this causes it to forget any previously remembered value.
+
+- say ([entity-name,] text)
+> Print the text to the standard output. (It doesn't matter what entity does this, as the result is the same.)
 
 ## References 
 1. Original Zombie Specification: 
 
     http://www.dangermouse.net/esoteric/zombie.html
 
-2. Scala API for 2.9.3.
+2. Scala API for 2.12.0.

@@ -59,6 +59,12 @@ class ScalaZombie {
         }
         memories(entity)
     }
+    def FORGET (entity: String) {
+        if (!memories.contains(entity)) {
+           throw new RuntimeException("Cannot forget sth for a non-existent entity.")
+        }
+        memories -= entity
+    }
     def SAY (num: Int) {
         SAY(curEntity, num.toString)
     }
