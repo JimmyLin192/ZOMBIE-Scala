@@ -15,7 +15,7 @@ This project implements a **slightly modified version** of ZOMBIE language using
 
 ## Coordinators
 1. Xin Lin (XL5224, jimmylin@utexas.edu)
-2. Spencer ()
+2. Spencer Bull(sgb695, sbull@cs.utexas.edu)
 3. Chu-qi Zhou ()
 
 
