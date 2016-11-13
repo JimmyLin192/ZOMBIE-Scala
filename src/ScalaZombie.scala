@@ -2,9 +2,10 @@
 import scala.collection.mutable
 
 class ScalaZombie {
-
+    /* Modelling */
     var curEntity : String = ""
-    var memories = new mutable.HashMap[String, Int]()
+    val memories = new mutable.HashMap[String, Int]()
+    var curLineNum : Int = 0
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
@@ -57,6 +58,7 @@ class ScalaZombie {
         if (!memories.contains(entity)) {
            throw new RuntimeException("Cannot moan sth for a non-existent entity.")
         }
+        curLineNum += 1
         memories(entity)
     }
     def FORGET (entity: String) {
