@@ -50,7 +50,7 @@ class ScalaZombie {
         }
         memories(entity) = num
     }
-    def MOAN (entity: String) {
+    def MOAN (entity: String): Int = {
         if (!canExecTask) {
             throw new RuntimeException("It is not the time yet to call MOAN.")
         }
@@ -58,6 +58,12 @@ class ScalaZombie {
            throw new RuntimeException("Cannot moan sth for a non-existent entity.")
         }
         memories(entity)
+    }
+    def SAY (num: Int) {
+        SAY(curEntity, num.toString)
+    }
+    def SAY (entity: String, num: Int) {
+        SAY(entity, num.toString)
     }
     def SAY (text: String) {
         SAY(curEntity, text)
