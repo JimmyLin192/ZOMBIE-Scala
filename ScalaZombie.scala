@@ -3,71 +3,72 @@ import scala.collection.mutable
 
 class ScalaZombie {
 
-    val curEntIty : String = None
-    val memories = new mutable.HashMap[String, Int]()
+    var curEntity : String = ""
+    var memories = new mutable.HashMap[String, Int]()
 
-    val canInitSummon : Boolean = false
-    val canExecTask : Boolean = false
+    var canInitSummon : Boolean = false
+    var canExecTask : Boolean = false
 
     /* Define keywords: EntIty Declaration */
     object ZOMBIE {
-        def apply(entIty: String) {
-            memories(entIty) = 0
+        def apply(entity: String) {
+            memories(entity) = 0
+            curEntity = entity
             canInitSummon = true
         }
     }
     object GHOST {
-        def apply(entIty: String) {
-
+        def apply(entity: String) {
+            
         }
     }
     object VAMPIRE {
-        def apply(entIty: String) {
+        def apply(entity: String) {
 
         }
     }
     object DEMON {
-        def apply(entIty: String) {
+        def apply(entity: String) {
 
         }
     }
     object DJINN {
-        def apply(entIty: String) {
+        def apply(entity: String) {
 
         }
     }
     /* Define keywords: Task */
     def REMEMBER (num: Int) {
-        REMEMBER(curEntIty, num)
+        REMEMBER(curEntity, num)
     }
-    def REMEMBER (entIty: String, num: Int) {
+    def REMEMBER (entity: String, num: Int) {
         if (!canExecTask) {
             throw new RuntimeException("It is not the time yet to call REMEMBER.")
         }
-        if (!memories.exists(entIty)) {
-           throw new RuntimeException("Cannot remember sth for a non-existent entIty.")
+        if (!memories.contains(entity)) {
+           throw new RuntimeException("Cannot remember sth for a non-existent entity.")
         }
-        memories(entIty) = num
+        memories(entity) = num
     }
-    def MOAN (entIty: String) {
+    def MOAN (entity: String) {
         if (!canExecTask) {
             throw new RuntimeException("It is not the time yet to call MOAN.")
         }
-        if (!memories.exists(entIty)) {
-           throw new RuntimeException("Cannot moan sth for a non-existent entIty.")
+        if (!memories.contains(entity)) {
+           throw new RuntimeException("Cannot moan sth for a non-existent entity.")
         }
-        memories(entIty)
+        memories(entity)
     }
     def SAY (text: String) {
-        SAY(curEntIty, text)
+        SAY(curEntity, text)
     }
-    def SAY (entIty: String, text: String) {
+    def SAY (entity: String, text: String) {
         if (!canExecTask) {
             throw new RuntimeException("It is not the time yet to call SAY.")
         }
-        if (!memories.exists(entIty)) {
-           throw new RuntimeException("Cannot say sth for a non-existent entIty.")
-
+        if (!memories.contains(entity)) {
+           throw new RuntimeException("Cannot say sth for a non-existent entity.")
+        }
         println(text)
     }
     /* Define keywords: Flow Control  */
