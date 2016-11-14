@@ -27,5 +27,14 @@ good:
 bad: 
 	scala -cp $(bin_dir) TasteBad 
 
+OpRem: 
+	scala -cp $(bin_dir) OpRemembering
+
+OpRend: 
+	scala -cp $(bin_dir) OpRend
+
+OpTurn: 
+	scala -cp $(bin_dir) OpTurn
+
 clean:
 	rm $(bin_dir)/*.class

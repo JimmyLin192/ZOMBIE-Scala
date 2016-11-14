@@ -306,6 +306,21 @@ class ScalaZombie {
         }
     }
     /* Operators */
+    def REMEMBERING (entity: String, number: Int): Boolean = {
+        if (!memories.contains(entity)) {
+            Exp.raiseLogicalError("Entity " + entity + " does not exist.")
+        }
+        return memories(entity) == number
+    }
+    def REMEMBERING (number: Int): Boolean = {
+        return REMEMBERING(curEntity, number)
+    }
+    def REND (num1: Int, num2: Int): Int = {
+        return num1 / num2
+    }
+    def TURN (number: Int):Int = {
+        return -number
+    }
 
     /* Check the well-formedness of the entire program */
     // TODO: need to add an ZEND for every zombie script

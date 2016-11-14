@@ -94,20 +94,20 @@ Some statements delineate matched pairs, which may be nested to any level. All t
 
 ###Task Statements
 
-- `FORGET (entity-name)`
+- `FORGET(entity-name)`
 > Instructs the entity to forget its remembered data value.
 
-- `MOAN (entity-name)`
+- `MOAN(entity-name)`
 > Instructs the named entity to moan its remembered data value, and to keep remembering it.
 
-- `REMEMBER ([entity-name,] values)`
+- `REMEMBER([entity-name,] values)`
 > Instructs the entity to remember the sum of the values in the statement stack. Since a zombie can only remember one thing at a time, this causes it to forget any previously remembered value.
 
-- `SAY ([entity-name,] text)`
+- `SAY([entity-name,] text)`
 > Print the text to the standard output. (It doesn't matter what entity does this, as the result is the same.)
 
 ## Flow Control
-- `SHAMBLE ... UNTIL variable`
+- `SHAMBLE ... UNTIL(variable)`
 > Causes the entity to repeat the statements between shamble and until until the variable evaluates to true.
 
 - `SHAMBLE ... AROUND`
@@ -116,8 +116,18 @@ Some statements delineate matched pairs, which may be nested to any level. All t
 - `STUMBLE`
 > Causes the current task to become inactive immediately.
 
-- `TASTE variable GOOD ... BAD ... SPIT`
+- `TASTE(variable) GOOD ... BAD ... SPIT`
 > If the variable evaluates to true, causes the entity to perform the statements between good and bad, otherwise perform the statements between bad and spit.
+
+## Operators
+- `REMEMBERING([entity-name,] variable)`
+> Boolean operator that evaluates to true if the entity is currently remembering a data value equal to the given variable, false otherwise.
+
+- `REND(variable1, variable2)`
+> This operator pops the top two value off the statement stack, divides the second value by the top value, and puts the result back on the statement stack.
+
+- `TURN(variable)`
+> This operator replaces the top value of the statement stack with its negative.
 
 ## References
 1. Original Zombie Specification:
