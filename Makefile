@@ -6,8 +6,14 @@ all:
 	scala -cp $(bin_dir) ZombieHelloWorld 
 	scala -cp $(bin_dir) ZombieSimple
 
-shamble:
+shamble: around until
+
+around:
 	scala -cp $(bin_dir) ZombieShambleAround
+
+until: 
+	scala -cp $(bin_dir) ZombieShambleUntil
+
 
 clean:
 	rm $(bin_dir)/*.class

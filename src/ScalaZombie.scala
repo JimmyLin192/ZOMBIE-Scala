@@ -175,8 +175,9 @@ class ScalaZombie {
                 loopStack.top.setEndPos(aroundLineNum)
             }
             var loopLineNum = loopStack.top.loopStart
+            // start the infinite loop as specified
             while (true) {
-                println ("loopLineNum: " + loopLineNum)
+                // println ("loopLineNum: " + loopLineNum)
                 programs(loopLineNum).exec()
                 loopLineNum += 1
                 if (loopLineNum >= loopStack.top.loopEnd) {
@@ -184,13 +185,30 @@ class ScalaZombie {
                 }
             }
         }
-
     }
-    def UNTIL {
-        if (loopStack.isEmpty) {
-            throw new RuntimeException("Syntac Error: UNTIL does not follow SHAMBLE")
+    object UNTIL {
+        def apply (cond: Boolean) {
+            programs(curLineNum) = new stmtUntil(curLineNum, cond)
+            curLineNum += 1
         }
-        loopStack.top.setEndPos(curLineNum)
+    }
+    class stmtUntil (untilLineNum: Int, cond: Boolean) extends Statement {
+        exec()
+        override def exec() {
+            if (loopStack.isEmpty) {
+                throw new RuntimeException("Syntac Error: UNTIL does not follow SHAMBLE")
+            }
+            if (loopStack.top.loopEnd < 0) {
+                loopStack.top.setEndPos(untilLineNum)
+            }
+            while (!cond) {
+                var loopLineNum = loopStack.top.loopStart
+                while (loopLineNum < loopStack.top.loopEnd) {
+                    programs(loopLineNum).exec()
+                    loopLineNum += 1
+                }
+            }
+        }
     }
     def STUMBLE {
         

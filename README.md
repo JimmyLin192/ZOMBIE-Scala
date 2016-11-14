@@ -14,13 +14,17 @@ This project implements a **slightly modified version** of ZOMBIE language using
 8. implement other entity types: ghost, vampire
 
 ## Coordinators
-1. Xin Lin (XL5224, jimmylin@utexas.edu)
-2. Spencer Bull(sgb695, sbull@cs.utexas.edu)
+1. Xin Lin (xl5224, jimmylin@utexas.edu)
+2. Spencer Bull (sgb695, sbull@cs.utexas.edu)
 3. Chuqi Zhou (cz4792, cz4792@utexas.edu)
 
 
 ## Usage
+To compile the entire codebase of the zombie package, please do
 
+	make
+	
+All compiled binary files will be placed under the *bin/* directory
 
 ## M-ZOMBIE Language
 
