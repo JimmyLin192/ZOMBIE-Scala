@@ -1,22 +1,6 @@
 /* Scala Implementation of Zombie Language */
 import scala.collection.mutable
 
-class LoopBlock { 
-    var loopStart: Int = -1
-    var loopEnd: Int = -1
-    def this (start: Int, end: Int) {
-        this()
-        loopStart = start
-        loopEnd = end
-    }
-    def setStartPos (lineNum: Int) {
-        loopStart = lineNum
-    }
-    def setEndPos (lineNum: Int) {
-        loopEnd = lineNum
-    }
-}
-
 class ScalaZombie {
     /* Modelling */
     abstract class Statement {
@@ -26,12 +10,11 @@ class ScalaZombie {
     var curLineNum : Int = 1
     val memories = new mutable.HashMap[String, Int]()
     val programs = new mutable.HashMap[Int, Statement]()
-
     val loopStack = new mutable.Stack[LoopBlock]()
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
-
+    var breakStatus : Boolean = false
 
     /* Define keywords: EntIty Declaration */
     object ZOMBIE {
@@ -101,6 +84,9 @@ class ScalaZombie {
             if (!memories.contains(entity)) {
                 throw new RuntimeException("Cannot forget sth for a non-existent entity.")
             }
+            if (breakStatus) {
+                return 
+            }
             memories -= entity
         }
     }
@@ -108,10 +94,13 @@ class ScalaZombie {
         exec()
         override def exec() {
             if (!canExecTask) {
-                throw new RuntimeException("It is not the time yet to call SAY.")
+                Exp.raiseSyntaxError("It is not the time yet to call SAY.")
             }
             if (!memories.contains(entity)) {
-                throw new RuntimeException("Cannot say sth for a non-existent entity.")
+                Exp.raiseLogicalError("Cannot SAY sth for a non-existent entity.")
+            }
+            if (breakStatus) {
+                return 
             }
             println(text)
         }
@@ -120,20 +109,26 @@ class ScalaZombie {
         exec()
         override def exec () {
             if (!canExecTask) {
-                throw new RuntimeException("It is not the time yet to call REMEMBER.")
+                Exp.raiseSyntaxError("It is not the time yet to call REMEMBER.")
             }
             if (!memories.contains(entity)) {
-                throw new RuntimeException("Cannot remember sth for a non-existent entity.")
+                Exp.raiseLogicalError("Cannot REMEMBER sth for a non-existent entity.")
+            }
+            if (breakStatus) {
+                return 
             }
             memories(entity) = num 
         }
     }
     def MOAN (entity: String): Int = {
         if (!canExecTask) {
-            throw new RuntimeException("It is not the time yet to call MOAN.")
+            Exp.raiseSyntaxError("It is not the time yet to call MOAN.")
         }
         if (!memories.contains(entity)) {
-           throw new RuntimeException("Cannot moan sth for a non-existent entity.")
+            Exp.raiseLogicalError("Cannot MOAN sth for a non-existent entity.")
+        }
+        if (breakStatus) {
+            return memories(entity)
         }
         curLineNum += 1
         return memories(entity)
@@ -146,33 +141,56 @@ class ScalaZombie {
             canExecTask = true
             canInitSummon = false
         }
+        if (breakStatus) {
+            return 
+        }
     }
     def BIND {
         if (canExecTask) {
             canExecTask = false
         } else {
-            throw new RuntimeException("It is not the time yet to call BIND.")
+            Exp.raiseSyntaxError("It is not the time yet to call BIND.")
+        }
+        if (breakStatus) {
+            return 
         }
     }
     def DISTURB {
 
     }
     /* Repetition */
-    def SHAMBLE {
+    def SHAMBLE { // loop labeler
         loopStack.push(new LoopBlock (curLineNum, -1))
     }
-    def AROUND {
+    def AROUND {  // until false
         programs(curLineNum) = new stmtAround(curLineNum)
         curLineNum += 1
+        loopStack.pop()
+    }
+    object UNTIL {
+        def apply (cond: Boolean) {
+            programs(curLineNum) = new stmtUntil(curLineNum, cond)
+            curLineNum += 1
+        }
+        loopStack.pop()
+    }
+    def STUMBLE { // break
+        programs(curLineNum) = new stmtStumble(curLineNum)
+        curLineNum += 1
+        loopStack.pop()
     }
     class stmtAround (aroundLineNum: Int) extends Statement {
         exec()
         override def exec() {
             if (loopStack.isEmpty) {
-                throw new RuntimeException("Syntac Error: AROUND does not follow SHAMBLE")
+                Exp.raiseSyntaxError("AROUND does not follow SHAMBLE")
             }
             if (loopStack.top.loopEnd < 0) {
                 loopStack.top.setEndPos(aroundLineNum)
+            }
+            if (breakStatus) {
+                breakStatus = false
+                return 
             }
             var loopLineNum = loopStack.top.loopStart
             // start the infinite loop as specified
@@ -186,20 +204,18 @@ class ScalaZombie {
             }
         }
     }
-    object UNTIL {
-        def apply (cond: Boolean) {
-            programs(curLineNum) = new stmtUntil(curLineNum, cond)
-            curLineNum += 1
-        }
-    }
     class stmtUntil (untilLineNum: Int, cond: Boolean) extends Statement {
         exec()
         override def exec() {
             if (loopStack.isEmpty) {
-                throw new RuntimeException("Syntac Error: UNTIL does not follow SHAMBLE")
+                Exp.raiseSyntaxError("UNTIL does not follow SHAMBLE")
             }
             if (loopStack.top.loopEnd < 0) {
                 loopStack.top.setEndPos(untilLineNum)
+            }
+            if (breakStatus) {
+                breakStatus = false
+                return 
             }
             while (!cond) {
                 var loopLineNum = loopStack.top.loopStart
@@ -210,9 +226,18 @@ class ScalaZombie {
             }
         }
     }
-    def STUMBLE {
-        
+    class stmtStumble (stumbleLineNum: Int) extends Statement {
+        exec() 
+        override def exec() {
+            if (loopStack.isEmpty) {
+                Exp.raiseSyntaxError("STUMBLE is not in a loop.")
+            }
+            if (loopStack.top.loopEnd < 0) {
+                breakStatus = true
+            }
+        }
     }
+    
     /* Condition */
     def TASTE {
 
@@ -222,6 +247,14 @@ class ScalaZombie {
     }
     def BAD {
 
+    }
+    /* Check the well-formedness of the entire program */
+   // TODO: need to add an ZEND for every zombie script
+    def ZEND {
+        // constraint: one zombie script has at least one zombie
+        if (memories.isEmpty) {
+            Exp.raiseLogicalError("No zombie definition found! One zombie script must have at least one zombie.")
+        }
     }
 }
 
