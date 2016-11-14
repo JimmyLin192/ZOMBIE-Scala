@@ -88,23 +88,36 @@ Entity-statements is a list of any valid statements, which may include entity de
 ###Entity Declaration Statements
 Some statements delineate matched pairs, which may be nested to any level. All the following combinations are properly matched pairs:
 
-- summon / animate
-- summon / bind
-- summon / disturb
+- SUMMON / ANIMATE
+- SUMMON / BIND
+- SUMMON / DISTURB
 
 ###Task Statements
 
-- forget (entity-name)
+- `FORGET (entity-name)`
 > Instructs the entity to forget its remembered data value.
 
-- moan (entity-name)
+- `MOAN (entity-name)`
 > Instructs the named entity to moan its remembered data value, and to keep remembering it.
 
-- remember ([entity-name,] values)
+- `REMEMBER ([entity-name,] values)`
 > Instructs the entity to remember the sum of the values in the statement stack. Since a zombie can only remember one thing at a time, this causes it to forget any previously remembered value.
 
-- say ([entity-name,] text)
+- `SAY ([entity-name,] text)`
 > Print the text to the standard output. (It doesn't matter what entity does this, as the result is the same.)
+
+## Flow Control
+- `SHAMBLE ... UNTIL variable`
+> Causes the entity to repeat the statements between shamble and until until the variable evaluates to true.
+
+- `SHAMBLE ... AROUND`
+> Causes the entity to repeat the statements between shamble and around in an infinite loop.
+
+- `STUMBLE`
+> Causes the current task to become inactive immediately.
+
+- `TASTE variable GOOD ... BAD ... SPIT`
+> If the variable evaluates to true, causes the entity to perform the statements between good and bad, otherwise perform the statements between bad and spit.
 
 ## References
 1. Original Zombie Specification:

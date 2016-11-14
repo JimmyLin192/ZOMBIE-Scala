@@ -11,6 +11,7 @@ class ScalaZombie {
     val memories = new mutable.HashMap[String, Int]()
     val programs = new mutable.HashMap[Int, Statement]()
     val loopStack = new mutable.Stack[LoopBlock]()
+    val condStack = new mutable.Stack[CondBlock]()
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
@@ -79,7 +80,7 @@ class ScalaZombie {
         }
     }
     class stmtForget (entity: String) extends Statement {
-        exec()
+        if (condStack.isEmpty) exec()
         override def exec() {
             if (!memories.contains(entity)) {
                 throw new RuntimeException("Cannot forget sth for a non-existent entity.")
@@ -91,7 +92,7 @@ class ScalaZombie {
         }
     }
     class stmtSay (entity: String, text: String) extends Statement {
-        exec()
+        if (condStack.isEmpty) exec()
         override def exec() {
             if (!canExecTask) {
                 Exp.raiseSyntaxError("It is not the time yet to call SAY.")
@@ -106,7 +107,7 @@ class ScalaZombie {
         }
     }
     class stmtRemember (entity: String, num: Int) extends Statement {
-        exec()
+        if (condStack.isEmpty) exec()
         override def exec () {
             if (!canExecTask) {
                 Exp.raiseSyntaxError("It is not the time yet to call REMEMBER.")
@@ -237,16 +238,72 @@ class ScalaZombie {
             }
         }
     }
-    
     /* Condition */
-    def TASTE {
-
+    object TASTE {
+        def apply (cond: Boolean) {
+            programs(curLineNum) = new stmtTaste(curLineNum, cond)
+            curLineNum += 1
+        }
     }
     def GOOD {
-
+        programs(curLineNum) = new stmtGood(curLineNum)
+        curLineNum += 1
     }
     def BAD {
-
+        programs(curLineNum) = new stmtBad(curLineNum)
+        curLineNum += 1
+    }
+    def SPIT {
+        programs(curLineNum) = new stmtSpit(curLineNum)
+        curLineNum += 1
+    }
+    class stmtTaste (tasteLineNum: Int, cond: Boolean) extends Statement {
+        exec()
+        override def exec() {
+            condStack.push(new CondBlock(cond))
+            condStack.top.setTastePos(tasteLineNum)
+            if (breakStatus) {
+                return 
+            }
+        }
+    }
+    class stmtGood (goodLineNum: Int) extends Statement {
+        exec()
+        override def exec() {
+            condStack.top.setGoodPos(goodLineNum)
+            if (breakStatus) {
+                return 
+            }
+        }
+    }
+    class stmtBad (badLineNum: Int) extends Statement {
+        exec()
+        override def exec() {
+            condStack.top.setBadPos(badLineNum)
+            if (!breakStatus && condStack.top.conditional) {
+                var execLineNum: Int = condStack.top.goodPos
+                var execLineEnd: Int = condStack.top.badPos
+                while (execLineNum < execLineEnd) {
+                    programs(execLineNum).exec()
+                    execLineNum += 1
+                }
+            }
+        }
+    }
+    class stmtSpit (spitLineNum: Int) extends Statement {
+        exec()
+        override def exec() {
+            condStack.top.setSpitPos(spitLineNum)
+            if (!breakStatus && !condStack.top.conditional) {
+                var execLineNum: Int = condStack.top.badPos
+                var execLineEnd: Int = condStack.top.spitPos
+                while (execLineNum < execLineEnd) {
+                    programs(execLineNum).exec()
+                    execLineNum += 1
+                }
+            }
+            condStack.pop
+        }
     }
     /* Operators */
 
@@ -257,6 +314,8 @@ class ScalaZombie {
         if (memories.isEmpty) {
             Exp.raiseLogicalError("No zombie definition found! One zombie script must have at least one zombie.")
         }
+        // TODO: more constraints to check well-formedness
+
     }
 }
 

@@ -4,7 +4,11 @@ zsc_dir = zscripts
 
 all: 
 	scalac $(src_dir)/*.scala $(zsc_dir)/*.scala -d $(bin_dir)
+
+hello: 
 	scala -cp $(bin_dir) HelloWorld 
+
+simple:
 	scala -cp $(bin_dir) Simple
 
 shamble: around until
@@ -14,6 +18,14 @@ around:
 
 until: 
 	scala -cp $(bin_dir) ShambleUntil
+
+taste: good bad
+
+good: 
+	scala -cp $(bin_dir) TasteGood 
+
+bad: 
+	scala -cp $(bin_dir) TasteBad 
 
 clean:
 	rm $(bin_dir)/*.class
