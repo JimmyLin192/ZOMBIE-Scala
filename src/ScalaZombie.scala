@@ -1,13 +1,33 @@
 /* Scala Implementation of Zombie Language */
 import scala.collection.mutable
 
+class LoopBlock { 
+    var loopStart: Int = -1
+    var loopEnd: Int = -1
+    def this (start: Int, end: Int) {
+        this()
+        loopStart = start
+        loopEnd = end
+    }
+    def setStartPos (lineNum: Int) {
+        loopStart = lineNum
+    }
+    def setEndPos (lineNum: Int) {
+        loopEnd = lineNum
+    }
+}
+
 class ScalaZombie {
     /* Modelling */
-    abstract sealed class Statement
+    abstract class Statement {
+        def exec() 
+    }
     var curEntity : String = ""
-    var curLineNum : Int = 0
+    var curLineNum : Int = 1
     val memories = new mutable.HashMap[String, Int]()
     val programs = new mutable.HashMap[Int, Statement]()
+
+    val loopStack = new mutable.Stack[LoopBlock]()
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
@@ -77,7 +97,7 @@ class ScalaZombie {
     }
     class stmtForget (entity: String) extends Statement {
         exec()
-        def exec() {
+        override def exec() {
             if (!memories.contains(entity)) {
                 throw new RuntimeException("Cannot forget sth for a non-existent entity.")
             }
@@ -86,7 +106,7 @@ class ScalaZombie {
     }
     class stmtSay (entity: String, text: String) extends Statement {
         exec()
-        def exec() {
+        override def exec() {
             if (!canExecTask) {
                 throw new RuntimeException("It is not the time yet to call SAY.")
             }
@@ -98,7 +118,7 @@ class ScalaZombie {
     }
     class stmtRemember (entity: String, num: Int) extends Statement {
         exec()
-        def exec () {
+        override def exec () {
             if (!canExecTask) {
                 throw new RuntimeException("It is not the time yet to call REMEMBER.")
             }
@@ -139,10 +159,24 @@ class ScalaZombie {
     }
     /* Repetition */
     def SHAMBLE {
-        
+        loopStack.push(new LoopBlock (curLineNum, -1))
+    }
+    def AROUND {
+        if (loopStack.isEmpty) {
+            throw new RuntimeException("Syntac Error: AROUND does not follow SHAMBLE")
+        }
+        loopStack.top.setStartPos(curLineNum)
+        var loopLineNum = loopStack.top.loopStart
+        while (loopLineNum <= loopStack.top.loopEnd) {
+            programs(loopLineNum).exec()
+            loopLineNum += 1
+        }
     }
     def UNTIL {
-        
+        if (loopStack.isEmpty) {
+            throw new RuntimeException("Syntac Error: UNTIL does not follow SHAMBLE")
+        }
+        loopStack.top.setEndPos(curLineNum)
     }
     def STUMBLE {
         
