@@ -128,7 +128,7 @@ class ScalaZombie {
             memories(entity) = num 
         }
     }
-     def MOAN (entity: String): Int = {
+    def MOAN (entity: String): Int = {
         if (!canExecTask) {
             throw new RuntimeException("It is not the time yet to call MOAN.")
         }
@@ -162,15 +162,29 @@ class ScalaZombie {
         loopStack.push(new LoopBlock (curLineNum, -1))
     }
     def AROUND {
-        if (loopStack.isEmpty) {
-            throw new RuntimeException("Syntac Error: AROUND does not follow SHAMBLE")
+        programs(curLineNum) = new stmtAround(curLineNum)
+        curLineNum += 1
+    }
+    class stmtAround (aroundLineNum: Int) extends Statement {
+        exec()
+        override def exec() {
+            if (loopStack.isEmpty) {
+                throw new RuntimeException("Syntac Error: AROUND does not follow SHAMBLE")
+            }
+            if (loopStack.top.loopEnd < 0) {
+                loopStack.top.setEndPos(aroundLineNum)
+            }
+            var loopLineNum = loopStack.top.loopStart
+            while (true) {
+                println ("loopLineNum: " + loopLineNum)
+                programs(loopLineNum).exec()
+                loopLineNum += 1
+                if (loopLineNum >= loopStack.top.loopEnd) {
+                    loopLineNum = loopStack.top.loopStart
+                }
+            }
         }
-        loopStack.top.setStartPos(curLineNum)
-        var loopLineNum = loopStack.top.loopStart
-        while (loopLineNum <= loopStack.top.loopEnd) {
-            programs(loopLineNum).exec()
-            loopLineNum += 1
-        }
+
     }
     def UNTIL {
         if (loopStack.isEmpty) {

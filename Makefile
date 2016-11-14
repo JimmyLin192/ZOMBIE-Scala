@@ -6,5 +6,8 @@ all:
 	scala -cp $(bin_dir) ZombieHelloWorld 
 	scala -cp $(bin_dir) ZombieSimple
 
+shamble:
+	scala -cp $(bin_dir) ZombieShambleAround
+
 clean:
 	rm $(bin_dir)/*.class
