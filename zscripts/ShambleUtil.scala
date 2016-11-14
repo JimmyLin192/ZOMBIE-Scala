@@ -1,4 +1,4 @@
-object ZombieShambleUntil extends ScalaZombie {
+object ShambleUntil extends ScalaZombie {
     def main(args: Array[String]): Unit = {
 ZOMBIE("Zombie1")
 SUMMON

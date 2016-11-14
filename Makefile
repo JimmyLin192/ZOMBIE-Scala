@@ -4,16 +4,16 @@ zsc_dir = zscripts
 
 all: 
 	scalac $(src_dir)/*.scala $(zsc_dir)/*.scala -d $(bin_dir)
-	scala -cp $(bin_dir) ZombieHelloWorld 
-	scala -cp $(bin_dir) ZombieSimple
+	scala -cp $(bin_dir) HelloWorld 
+	scala -cp $(bin_dir) Simple
 
 shamble: around until
 
 around:
-	scala -cp $(bin_dir) ZombieShambleAround
+	scala -cp $(bin_dir) ShambleAround
 
 until: 
-	scala -cp $(bin_dir) ZombieShambleUntil
+	scala -cp $(bin_dir) ShambleUntil
 
 clean:
 	rm $(bin_dir)/*.class

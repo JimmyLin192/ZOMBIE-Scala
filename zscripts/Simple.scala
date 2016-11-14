@@ -1,4 +1,4 @@
-object ZombieSimple extends ScalaZombie {
+object Simple extends ScalaZombie {
     def main(args: Array[String]): Unit = {
 ZOMBIE("Zombie1")
 SUMMON

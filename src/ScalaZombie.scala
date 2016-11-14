@@ -248,8 +248,10 @@ class ScalaZombie {
     def BAD {
 
     }
+    /* Operators */
+
     /* Check the well-formedness of the entire program */
-   // TODO: need to add an ZEND for every zombie script
+    // TODO: need to add an ZEND for every zombie script
     def ZEND {
         // constraint: one zombie script has at least one zombie
         if (memories.isEmpty) {
