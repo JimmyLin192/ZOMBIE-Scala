@@ -4,7 +4,7 @@ import scala.collection.mutable
 class ScalaZombie {
     /* Modelling */
     abstract class Statement {
-        def exec() 
+        def exec()
     }
     var curEntity : String = ""
     var curLineNum : Int = 1
@@ -12,6 +12,7 @@ class ScalaZombie {
     val programs = new mutable.HashMap[Int, Statement]()
     val loopStack = new mutable.Stack[LoopBlock]()
     val condStack = new mutable.Stack[CondBlock]()
+    val stateStack = new mutable.Stack[]()
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
@@ -27,7 +28,7 @@ class ScalaZombie {
     }
     object GHOST {
         def apply(entity: String) {
-            
+
         }
     }
     object VAMPIRE {
@@ -45,6 +46,14 @@ class ScalaZombie {
 
         }
     }
+    /* Deffine Task */
+    object TASK {
+        def apply(task: String) {
+            canExecTask = true
+            canInitSummon = true
+        }
+    }
+
     /* Define keywords: Task */
     object REMEMBER {
         def apply(num: Int) {
@@ -86,7 +95,7 @@ class ScalaZombie {
                 throw new RuntimeException("Cannot forget sth for a non-existent entity.")
             }
             if (breakStatus) {
-                return 
+                return
             }
             memories -= entity
         }
@@ -101,7 +110,7 @@ class ScalaZombie {
                 Exp.raiseLogicalError("Cannot SAY sth for a non-existent entity.")
             }
             if (breakStatus) {
-                return 
+                return
             }
             println(text)
         }
@@ -116,9 +125,9 @@ class ScalaZombie {
                 Exp.raiseLogicalError("Cannot REMEMBER sth for a non-existent entity.")
             }
             if (breakStatus) {
-                return 
+                return
             }
-            memories(entity) = num 
+            memories(entity) = num
         }
     }
     def MOAN (entity: String): Int = {
@@ -133,8 +142,28 @@ class ScalaZombie {
         }
         curLineNum += 1
         return memories(entity)
-    }   
-    
+    }
+
+    /* Animate
+     * - Concludes A summon or task.
+     * - When concluding a summon, it concludes the entity summoning
+     *    and, if a zombie, makes the entity active.
+     * - When concluding a task, it ends the command definition
+     *    and marks that command as an active command for new entities.
+     */
+    def ANIMATE {
+        if (canExecTask) {
+            canExecTask = false
+        } else if (canInitSummon) { // if else to handle the case when you want to end a task, but not a summon
+            canInitSummon = false
+        } else {
+            Exp.raiseSyntaxError("It is not yet time to call ANIMATE")
+        }
+        if(breakStatus) {
+          return
+        }
+    }
+
     /* Define keywords: Flow Control  */
     /* Sequential */
     def SUMMON {
@@ -143,22 +172,39 @@ class ScalaZombie {
             canInitSummon = false
         }
         if (breakStatus) {
-            return 
+            return
         }
     }
+
     def BIND {
         if (canExecTask) {
             canExecTask = false
+        } else if (canInitSummon) { // if else to handle the case when you want to end a task, but not a summon
+            canInitSummon = false
         } else {
             Exp.raiseSyntaxError("It is not the time yet to call BIND.")
         }
         if (breakStatus) {
-            return 
+            return
         }
     }
-    def DISTURB {
 
+    /*
+     * Concludes a summon and, if a ghost, makes
+     *   the entity active. It does not make other entities active.
+     */
+    def DISTURB {
+        // TODO if Entity Ghost, then make entity active
+        if (canInitSummon) {
+            canInitSummon = false
+        } else {
+            Exp.raiseSyntaxError("It is not yet time to call DISTURB")
+        }
+        if (breakStatus) {
+            return
+        }
     }
+
     /* Repetition */
     def SHAMBLE { // loop labeler
         loopStack.push(new LoopBlock (curLineNum, -1))
@@ -191,7 +237,7 @@ class ScalaZombie {
             }
             if (breakStatus) {
                 breakStatus = false
-                return 
+                return
             }
             var loopLineNum = loopStack.top.loopStart
             // start the infinite loop as specified
@@ -216,7 +262,7 @@ class ScalaZombie {
             }
             if (breakStatus) {
                 breakStatus = false
-                return 
+                return
             }
             while (!cond) {
                 var loopLineNum = loopStack.top.loopStart
@@ -228,7 +274,7 @@ class ScalaZombie {
         }
     }
     class stmtStumble (stumbleLineNum: Int) extends Statement {
-        exec() 
+        exec()
         override def exec() {
             if (loopStack.isEmpty) {
                 Exp.raiseSyntaxError("STUMBLE is not in a loop.")
@@ -263,7 +309,7 @@ class ScalaZombie {
             condStack.push(new CondBlock(cond))
             condStack.top.setTastePos(tasteLineNum)
             if (breakStatus) {
-                return 
+                return
             }
         }
     }
@@ -272,7 +318,7 @@ class ScalaZombie {
         override def exec() {
             condStack.top.setGoodPos(goodLineNum)
             if (breakStatus) {
-                return 
+                return
             }
         }
     }
@@ -333,4 +379,3 @@ class ScalaZombie {
 
     }
 }
-

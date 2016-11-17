@@ -6,7 +6,7 @@ case object ET_DEMON extends EntityType
 case object ET_DJINN extends EntityType
 
 
-class LoopBlock { 
+class LoopBlock {
     var loopStart: Int = -1
     var loopEnd: Int = -1
     def this (start: Int, end: Int) {
@@ -44,4 +44,9 @@ class CondBlock {
     def setSpitPos (pos: Int) {
         spitPos = pos
     }
+}
+
+class StateBlock {
+    var task : String = ""
+    
 }

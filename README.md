@@ -8,7 +8,7 @@ This project implements a **slightly modified version** of ZOMBIE language using
 2. ~~implement conditions of flow control~~
 3. ~~implement repetitions of flow control~~
 4. ~~implement Operators: remembering, rend, turn~~
-5. implement full set of statements delineate matched pairs: summon / animate, summon / bind, summon / disturb
+5. ~~implement full set of statements delineate matched pairs: summon / animate, summon / bind, summon / disturb~~
 6. implement matched pairs that supports recursions: task / animate, task / bind
 7. implement statement stacks (very important)
 8. implement other entity types: ghost, vampire
@@ -23,10 +23,10 @@ This project implements a **slightly modified version** of ZOMBIE language using
 To compile the entire codebase of the zombie package, please do
 
 	make
-or 
+or
 
 	scalac src/*.scala -d bin/
-	
+
 All compiled binary files will be placed under the `bin/` directory.
 
 To run pre-defined tests, you can do
