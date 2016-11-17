@@ -1,4 +1,4 @@
-object HellowWorldAnimate extends ScalaZombie {
+object HelloWorldAnimateTask extends ScalaZombie {
     def main (args: Array[String]): Unit = {
 ZOMBIE("HelloWorld")
 SUMMON

@@ -12,6 +12,7 @@ class ScalaZombie {
     val programs = new mutable.HashMap[Int, Statement]()
     val loopStack = new mutable.Stack[LoopBlock]()
     val condStack = new mutable.Stack[CondBlock]()
+    val stateStack = new mutable.Stack[]()
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
@@ -48,7 +49,8 @@ class ScalaZombie {
     /* Deffine Task */
     object TASK {
         def apply(task: String) {
-            // TODO
+            canExecTask = true
+            canInitSummon = true
         }
     }
 

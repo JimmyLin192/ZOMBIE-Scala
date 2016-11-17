@@ -42,5 +42,8 @@ animate:
 task:
 	scala -cp $(bin_dir) HelloWorldAnimateTask
 
+bind:
+	scala -cp $(bin_dir) Memeber1
+
 clean:
 	rm $(bin_dir)/*.class
