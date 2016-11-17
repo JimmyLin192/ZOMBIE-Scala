@@ -145,9 +145,8 @@ class ScalaZombie {
     def ANIMATE {
         if (canExecTask) {
             canExecTask = false
-        }
-        if (canInitSummon) {
-          canInitSummon = false
+        } else if (canInitSummon) { // if else to handle the case when you want to end a task, but not a summon
+            canInitSummon = false
         }
         if(breakStatus) {
           return
