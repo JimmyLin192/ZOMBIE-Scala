@@ -147,6 +147,8 @@ class ScalaZombie {
             canExecTask = false
         } else if (canInitSummon) { // if else to handle the case when you want to end a task, but not a summon
             canInitSummon = false
+        } else {
+            Exp.raiseSyntaxError("It is not yet time to call ANIMATE")
         }
         if(breakStatus) {
           return
@@ -166,11 +168,10 @@ class ScalaZombie {
     }
 
     def BIND {
-        if (canInitSummon) {
-            canInitSummon = false
-        }
         if (canExecTask) {
             canExecTask = false
+        } else if (canInitSummon) { // if else to handle the case when you want to end a task, but not a summon
+            canInitSummon = false
         } else {
             Exp.raiseSyntaxError("It is not the time yet to call BIND.")
         }
@@ -188,7 +189,7 @@ class ScalaZombie {
         if (canInitSummon) {
             canInitSummon = false
         } else {
-            Exp.raiseSyntaxError("It is not the time yet t call DISTURB")
+            Exp.raiseSyntaxError("It is not yet time to call DISTURB")
         }
         if (breakStatus) {
             return
