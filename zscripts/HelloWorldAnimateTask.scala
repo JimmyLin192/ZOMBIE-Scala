@@ -5,6 +5,9 @@ SUMMON
     TASK("SayHello")
         SAY("Hello World!")
     ANIMATE
+    TASK("SayHelloAgain")
+        SAY("Hellow Again World!")
+    ANIMATE
 ANIMATE
     }
 }
