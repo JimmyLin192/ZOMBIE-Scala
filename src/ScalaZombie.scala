@@ -45,6 +45,13 @@ class ScalaZombie {
 
         }
     }
+    /* Deffine Task */
+    object TASK {
+        def apply(task: String) {
+            // TODO
+        }
+    }
+
     /* Define keywords: Task */
     object REMEMBER {
         def apply(num: Int) {
