@@ -44,6 +44,8 @@ task:
 
 bind:
 	scala -cp $(bin_dir) Memeber1
+fib:
+	scala -cp $(bin_dir) Fib
 
 clean:
 	rm $(bin_dir)/*.class

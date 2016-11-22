@@ -12,7 +12,6 @@ class ScalaZombie {
     val programs = new mutable.HashMap[Int, Statement]()
     val loopStack = new mutable.Stack[LoopBlock]()
     val condStack = new mutable.Stack[CondBlock]()
-    val stateStack = new mutable.Stack[]()
 
     var canInitSummon : Boolean = false
     var canExecTask : Boolean = false
@@ -88,6 +87,7 @@ class ScalaZombie {
             curLineNum += 1
         }
     }
+
     class stmtForget (entity: String) extends Statement {
         if (condStack.isEmpty) exec()
         override def exec() {
@@ -130,18 +130,34 @@ class ScalaZombie {
             memories(entity) = num
         }
     }
-    def MOAN (entity: String): Int = {
-        if (!canExecTask) {
-            Exp.raiseSyntaxError("It is not the time yet to call MOAN.")
+    object MOAN {
+        def apply(entity : String) : Int = {
+          if (!canExecTask) {
+              Exp.raiseSyntaxError("It is not the time yet to call MOAN.")
+          }
+          if (!memories.contains(entity)) {
+              Exp.raiseLogicalError("Cannot MOAN sth for a non-existent entity.")
+          }
+          if (breakStatus) {
+              return memories(entity)
+          }
+          curLineNum += 1
+          return memories(entity)
         }
-        if (!memories.contains(entity)) {
-            Exp.raiseLogicalError("Cannot MOAN sth for a non-existent entity.")
+        def apply(num : Int) : Int = {
+          if (!canExecTask) {
+              Exp.raiseSyntaxError("It is not the time yet to call MOAN.")
+          }
+          if (!memories.contains(curEntity) && curEntity != "") {
+              Exp.raiseLogicalError("Cannot MOAN sth for a non-existent entity.")
+          }
+          memories(curEntity) = num
+          if (breakStatus) {
+              return memories(curEntity)
+          }
+          curLineNum += 1
+          return memories(curEntity)
         }
-        if (breakStatus) {
-            return memories(entity)
-        }
-        curLineNum += 1
-        return memories(entity)
     }
 
     /* Animate

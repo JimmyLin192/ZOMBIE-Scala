@@ -45,8 +45,3 @@ class CondBlock {
         spitPos = pos
     }
 }
-
-class StateBlock {
-    var task : String = ""
-    
-}
