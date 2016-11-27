@@ -44,8 +44,12 @@ task:
 
 bind:
 	scala -cp $(bin_dir) Memeber1
+
 fib:
 	scala -cp $(bin_dir) Fib
+
+memberme:
+	scala -cp $(bin_dir) MemberMe
 
 clean:
 	rm $(bin_dir)/*.class
