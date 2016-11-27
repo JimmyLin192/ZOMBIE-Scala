@@ -243,8 +243,9 @@ class ScalaZombie {
         def apply (cond: Boolean) {
             programs(curLineNum) = new stmtUntil(curLineNum, cond)
             curLineNum += 1
+            loopStack.pop()
         }
-        loopStack.pop()
+        //loopStack.pop()
     }
     def STUMBLE { // break
         programs(curLineNum) = new stmtStumble(curLineNum)
@@ -289,11 +290,21 @@ class ScalaZombie {
                 breakStatus = false
                 return
             }
+            var loopLineNum = loopStack.top.loopStart
+
             while (!cond) {
+/*
                 var loopLineNum = loopStack.top.loopStart
                 while (loopLineNum < loopStack.top.loopEnd) {
                     programs(loopLineNum).exec()
                     loopLineNum += 1
+                }
+                */
+                // println ("loopLineNum: " + loopLineNum)
+                programs(loopLineNum).exec()
+                loopLineNum += 1
+                if (loopLineNum >= loopStack.top.loopEnd) {
+                    loopLineNum = loopStack.top.loopStart
                 }
             }
         }
