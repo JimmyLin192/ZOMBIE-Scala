@@ -7,10 +7,7 @@ class ScalaZombie {
         def exec()
     }
     var curEntity : String = ""
-    var curTask : String = ""
     var curLineNum : Int = 1
-    var activated : Boolean = false
-    var tasks = new mutable.HashMap[String, Boolean]
     val memories = new mutable.HashMap[String, Int]()
     val programs = new mutable.HashMap[Int, Statement]()
     val loopStack = new mutable.Stack[LoopBlock]()
@@ -53,7 +50,6 @@ class ScalaZombie {
         def apply(task: String) {
             canExecTask = true
             canInitSummon = true
-            curTask = task
         }
     }
 
@@ -174,10 +170,8 @@ class ScalaZombie {
     def ANIMATE {
         if (canExecTask) {
             canExecTask = false
-            tasks(curTask) = true
         } else if (canInitSummon) { // if else to handle the case when you want to end a task, but not a summon
             canInitSummon = false
-            activated = true
         } else {
             Exp.raiseSyntaxError("It is not yet time to call ANIMATE")
         }
@@ -201,10 +195,8 @@ class ScalaZombie {
     def BIND {
         if (canExecTask) {
             canExecTask = false
-            tasks(curTask) = false
         } else if (canInitSummon) { // if else to handle the case when you want to end a task, but not a summon
             canInitSummon = false
-            activated = false
         } else {
             Exp.raiseSyntaxError("It is not the time yet to call BIND.")
         }
@@ -216,7 +208,6 @@ class ScalaZombie {
     /*
      * Concludes a summon and, if a ghost, makes
      *   the entity active. It does not make other entities active.
-     * TODO remove if we don't implement Ghosts Entity
      */
     def DISTURB {
         // TODO if Entity Ghost, then make entity active
@@ -243,8 +234,9 @@ class ScalaZombie {
         def apply (cond: Boolean) {
             programs(curLineNum) = new stmtUntil(curLineNum, cond)
             curLineNum += 1
+            loopStack.pop()
         }
-        loopStack.pop()
+        //loopStack.pop()
     }
     def STUMBLE { // break
         programs(curLineNum) = new stmtStumble(curLineNum)
@@ -289,11 +281,21 @@ class ScalaZombie {
                 breakStatus = false
                 return
             }
+            var loopLineNum = loopStack.top.loopStart
+
             while (!cond) {
+/*
                 var loopLineNum = loopStack.top.loopStart
                 while (loopLineNum < loopStack.top.loopEnd) {
                     programs(loopLineNum).exec()
                     loopLineNum += 1
+                }
+                */
+                // println ("loopLineNum: " + loopLineNum)
+                programs(loopLineNum).exec()
+                loopLineNum += 1
+                if (loopLineNum >= loopStack.top.loopEnd) {
+                    loopLineNum = loopStack.top.loopStart
                 }
             }
         }
