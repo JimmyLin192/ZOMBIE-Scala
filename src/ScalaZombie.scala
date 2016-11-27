@@ -141,7 +141,7 @@ class ScalaZombie {
           if (breakStatus) {
               return memories(entity)
           }
-          curLineNum += 1
+          //curLineNum += 1
           return memories(entity)
         }
         def apply(num : Int) : Int = {
@@ -155,7 +155,7 @@ class ScalaZombie {
           if (breakStatus) {
               return memories(curEntity)
           }
-          curLineNum += 1
+          //curLineNum += 1
           return memories(curEntity)
         }
     }
@@ -234,8 +234,8 @@ class ScalaZombie {
         def apply (cond: Boolean) {
             programs(curLineNum) = new stmtUntil(curLineNum, cond)
             curLineNum += 1
+            loopStack.pop()
         }
-        loopStack.pop()
     }
     def STUMBLE { // break
         programs(curLineNum) = new stmtStumble(curLineNum)
@@ -258,7 +258,7 @@ class ScalaZombie {
             var loopLineNum = loopStack.top.loopStart
             // start the infinite loop as specified
             while (true) {
-                // println ("loopLineNum: " + loopLineNum)
+                //println ("loopLineNum: " + loopLineNum)
                 programs(loopLineNum).exec()
                 loopLineNum += 1
                 if (loopLineNum >= loopStack.top.loopEnd) {
@@ -283,6 +283,7 @@ class ScalaZombie {
             while (!cond) {
                 var loopLineNum = loopStack.top.loopStart
                 while (loopLineNum < loopStack.top.loopEnd) {
+                    //println("loopLineNum: " + loopLineNum)
                     programs(loopLineNum).exec()
                     loopLineNum += 1
                 }

@@ -7,7 +7,7 @@ BIND
 
 ZOMBIE("Zombie2")
 SUMMON
-    REMEMBER(2)
+    REMEMBER(1)
 BIND
 
 ZOMBIE("FibonacciZombie")
@@ -19,7 +19,7 @@ SUMMON
             SAY(MOAN("Zombie2"))
             REMEMBER("Zombie1", MOAN("Zombie1") + MOAN("Zombie2"))
             REMEMBER("Zombie2", MOAN("Zombie1") + MOAN("Zombie2"))
-            REMEMBER(MOAN("FibonacciZombie") + 1)
+            REMEMBER(MOAN(2))
         UNTIL(REMEMBERING(100))
     ANIMATE
 ANIMATE
