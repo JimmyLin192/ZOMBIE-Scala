@@ -127,6 +127,7 @@ class ScalaZombie {
             if (breakStatus) {
                 return
             }
+            println(memories)
             memories(entity) = num
         }
     }
@@ -158,7 +159,20 @@ class ScalaZombie {
           //curLineNum += 1
           return memories(curEntity)
         }
-    }
+        def apply() : Int = {
+            if (!canExecTask) {
+                Exp.raiseSyntaxError("It is not the time yet to call MOAN.")
+            }
+            if (!memories.contains(curEntity) && curEntity != "") {
+                Exp.raiseLogicalError("Cannot MOAN sth for a non-existent entity.")
+            }
+            if (breakStatus) {
+                return memories(curEntity)
+            }
+            println(memories(curEntity))
+            return memories(curEntity)
+          }
+      }
 
     /* Animate
      * - Concludes A summon or task.
