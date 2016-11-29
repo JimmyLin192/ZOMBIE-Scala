@@ -36,6 +36,9 @@ OpRend:
 OpTurn:
 	scala -cp $(bin_dir) OpTurn
 
+OpMix:
+	scala -cp $(bin_dir) OpMix
+
 animate:
 	scala -cp $(bin_dir) HelloWorldAnimate
 
