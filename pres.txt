@@ -1,4 +1,4 @@
 make task    HelloWorldAnimateTask.scala
-make OpMix   OpMix.scala
-make around  ShambleAround.scala
 make OpRem   OpRemembering.scala
+make around  ShambleAround.scala
+make OpMix   OpMix.scala
