@@ -23,18 +23,28 @@ This project implements a **slightly modified version** of ZOMBIE language using
 To compile the entire codebase of the zombie package, please do
 
 	make
+
 or
 
 	scalac src/*.scala -d bin/
+
+or (On UTCS machines)
+
+	/lusr/opt/scala-2.11.6/bin/scalac src/*.scala -d bin/
 
 All compiled binary files will be placed under the `bin/` directory.
 
 To run pre-defined tests, you can do
 
 	make [test_name]
+
 or
 
 	scala -cp bin/ [test_name]
+
+or (On UTCS machines)
+
+	/lusr/opt/scala-2.11.6/bin/scala -cp bin/ [test_name]
 
 ## M-ZOMBIE Language
 
