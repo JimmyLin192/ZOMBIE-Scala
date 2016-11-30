@@ -5,6 +5,9 @@ zsc_dir = zscripts
 all:
 	scalac $(src_dir)/*.scala $(zsc_dir)/*.scala -d $(bin_dir)
 
+tar: 
+	tar -czvf scala-zombie.tar.gz *
+
 hello:
 	scala -cp $(bin_dir) HelloWorld
 
