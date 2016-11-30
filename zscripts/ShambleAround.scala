@@ -3,8 +3,8 @@ object ShambleAround extends ScalaZombie {
 ZOMBIE("Zombie1")
 SUMMON
     SHAMBLE
-        SAY("I am Number One")
         REMEMBER(1)
+        SAY("I am Number One")
         SAY(MOAN("Zombie1"))
     AROUND
 BIND
