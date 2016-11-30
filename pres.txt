@@ -1,0 +1,4 @@
+make ANIMATE HelloWorldAnimate.scala
+make OpMix   OpMix.scala
+make around  ShambleAround.scala
+make OpRem   OpRemembering.scala

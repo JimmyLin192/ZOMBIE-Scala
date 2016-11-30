@@ -127,7 +127,7 @@ class ScalaZombie {
             if (breakStatus) {
                 return
             }
-            println(memories)
+            // println(memories)
             memories(entity) = num
         }
     }

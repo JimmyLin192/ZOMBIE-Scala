@@ -4,6 +4,8 @@ ZOMBIE("Zombie1")
 SUMMON
     SHAMBLE
         SAY("I am Number One")
+        REMEMBER(1)
+        SAY(MOAN("Zombie1"))
     AROUND
 BIND
     }

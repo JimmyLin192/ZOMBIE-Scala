@@ -13,9 +13,10 @@ BIND
 
 ZOMBIE("FibonacciZombie")
 SUMMON
-REMEMBER(0)
+REMEMBER(5)
 SAY(MOAN("Zombie1"))
 SAY(MOAN("Zombie2"))
+SAY(MOAN("FibonacciZombie"))
 BIND
     }
 }
